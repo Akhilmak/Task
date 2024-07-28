@@ -48,11 +48,13 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 
 **Response:**
 
+```json
 {
-"totalSaleAmount": 12345.67,
-"totalSoldItems": 100,
-"totalNotSoldItems": 50
+  "totalSaleAmount": 12345.67,
+  "totalSoldItems": 100,
+  "totalNotSoldItems": 50
 }
+```
 
 ### Get Transactions
 
