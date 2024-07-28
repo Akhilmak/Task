@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, button, input {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .chart-container {
+            width: 40%;
+            margin: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .charts {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        .statistics {
+            margin: 20px 0;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .transactions {
+            width: 80%;
+            margin: 20px 0;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .loading {
+            display: none;
+            font-size: 18px;
+            color: #3498db;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Combined Data Visualization</h1>
+        <label for="month-select">Select Month:</label>
+        <select id="month-select">
+            <option value="january">January</option>
+            <option value="february">February</option>
+            <option value="march" selected>March</option>
+            <option value="april">April</option>
+            <option value="may">May</option>
+            <option value="june">June</option>
+            <option value="july">July</option>
+            <option value="august">August</option>
+            <option value="september">September</option>
+            <option value="october">October</option>
+            <option value="november">November</option>
+            <option value="december">December</option>
+        </select>
+        <button onclick="fetchData()">Fetch Data</button>
+
+        <div class="loading" id="loading">Please wait...</div>
+
+        <div class="transactions">
+            <h2>Transactions</h2>
+            <input type="text" id="search-box" placeholder="Search transactions" oninput="searchTransactions()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Date of Sale</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-table-body">
+                    <!-- Transactions will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <button onclick="previousPage()">Previous</button>
+            <button onclick="nextPage()">Next</button>
+        </div>
+
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        <div class="statistics">
+            <h2>Statistics</h2>
+            <p id="totalSaleAmount"></p>
+            <p id="totalSoldItems"></p>
+            <p id="totalNotSoldItems"></p>
+        </div>
+    </div>
+
+    <script>
+        let barChartInstance = null;
+        let pieChartInstance = null;
+        let currentPage = 1;
+        let currentMonth = 'march';
+        let searchQuery = '';
+
+        async function fetchData() {
+            currentMonth = document.getElementById('month-select').value;
+            currentPage = 1;
+            searchQuery = '';
+            document.getElementById('search-box').value = '';
+            showLoading();
+            await fetchCombinedData();
+            await fetchTransactions();
+            hideLoading();
+        }
+
+        async function fetchCombinedData() {
+            const response = await fetch(`http://localhost:3000/combined-data/${currentMonth}`);
+            const data = await response.json();
+            console.log(data);
+
+            // Update statistics
+            document.getElementById('totalSaleAmount').innerText = `Total Sale Amount: $${data.statistics.totalSaleAmount}`;
+            document.getElementById('totalSoldItems').innerText = `Total Sold Items: ${data.statistics.totalSoldItems}`;
+            document.getElementById('totalNotSoldItems').innerText = `Total Not Sold Items: ${data.statistics.totalNotSoldItems}`;
+
+            // Destroy existing bar chart instance if it exists
+            if (barChartInstance) {
+                barChartInstance.destroy();
+            }
+
+            // Update bar chart
+            const barChartCtx = document.getElementById('barChart').getContext('2d');
+            barChartInstance = new Chart(barChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.barChart.map(item => item.priceRange),
+                    datasets: [{
+                        label: 'Number of Products',
+                        data: data.barChart.map(item => item.count),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Destroy existing pie chart instance if it exists
+            if (pieChartInstance) {
+                pieChartInstance.destroy();
+            }
+
+            // Update pie chart
+            const pieChartCtx = document.getElementById('pieChart').getContext('2d');
+            pieChartInstance = new Chart(pieChartCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data.pieChart),
+                    datasets: [{
+                        label: 'Product Categories',
+                        data: Object.values(data.pieChart),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+
+        async function fetchTransactions() {
+            const response = await fetch(`http://127.0.0.1:2006/products?page=${currentPage}&month=${currentMonth}&search=${searchQuery}`);
+            const data = await response.json();
+            console.log('Transactions:', data);
+
+            // Assuming the response structure is { products: [...] }
+            const transactions = data.products || [];
+            
+            const tableBody = document.getElementById('transactions-table-body');
+            tableBody.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.title}</td>
+                    <td>${transaction.description}</td>
+                    <td>${transaction.price}</td>
+                    <td>${transaction.dateOfSale}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function searchTransactions() {
+            searchQuery = document.getElementById('search-box').value;
+            currentPage = 1;
+            fetchTransactions();
+        }
+
+        function nextPage() {
+            currentPage++;
+            fetchTransactions();
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchTransactions();
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Initial fetch
+        fetchData();
+    </script>
+</body>
+</html>
