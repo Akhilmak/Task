@@ -180,16 +180,16 @@ Here are some images of the final output:
 
 ## Transaction List
 
-![alt text](image.png)
+![alt text](outputs/TransactionList.png)
 
 ## BarGraph
 
-![alt text](image-1.png)
+![alt text](outputs/BarGraph.png)
 
 ## Pie Chart
 
-![alt text](image-2.png)
+![alt text](outputs/pieChart.png)
 
 ## Statistics Data
 
-![alt text](image-3.png)
+![alt text](outputs/Statistics.png)
