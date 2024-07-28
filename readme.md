@@ -53,4 +53,108 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
   "totalSoldItems": 100,
   "totalNotSoldItems": 50
 }
+Get Transactions
+Endpoint: GET http://127.0.0.1:2006/products
+
+Description: Fetches all product transactions stored in the database.
+
+Response:
+
+[
+  {
+    "productId": "123",
+    "productName": "Product A",
+    "transactionDate": "2023-10-01",
+    "amount": 100.00,
+    "status": "sold"
+  },
+  {
+    "productId": "124",
+    "productName": "Product B",
+    "transactionDate": "2023-10-02",
+    "amount": 150.00,
+    "status": "not sold"
+  }
+]
+Get Bar Chart Data
+Endpoint: GET http://127.0.0.1:4000/bar-chart
+
+Description: Fetches data to be used for generating a bar chart.
+
+Response:
+
+{
+  "labels": ["January", "February", "March"],
+  "data": [1000, 1500, 2000]
+}
+Get Pie Chart Data
+Endpoint: GET http://127.0.0.1:5000/pie-chart
+
+Description: Fetches data to be used for generating a pie chart.
+
+Response:
+
+{
+  "labels": ["Sold", "Not Sold"],
+  "data": [70, 30]
+}
+Get Combined Data
+Endpoint: GET http://localhost:3000/combined-data/:month
+
+Description: Fetches combined data for various analyses.
+
+Response:
+
+{
+  "statistics": {
+    "totalSaleAmount": 12345.67,
+    "totalSoldItems": 100,
+    "totalNotSoldItems": 50
+  },
+  "barChart": {
+    "labels": ["January", "February", "March"],
+    "data": [1000, 1500, 2000]
+  },
+  "pieChart": {
+    "labels": ["Sold", "Not Sold"],
+    "data": [70, 30]
+  },
+  "transactions": [
+    {
+      "productId": "123",
+      "productName": "Product A",
+      "transactionDate": "2023-10-01",
+      "amount": 100.00,
+      "status": "sold"
+    },
+    {
+      "productId": "124",
+      "productName": "Product B",
+      "transactionDate": "2023-10-02",
+      "amount": 150.00,
+      "status": "not sold"
+    }
+  ]
+}
+Database Schema
+Define the schema for the products collection/table using Mongoose:
+
+const mongoose = require('mongoose');
+
+const productSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
+  category: { type: String, required: true },
+  image: { type: String, required: true },
+  sold: { type: Boolean, default: false },
+  dateOfSale: { type: Date }
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;
+
+This updated content includes the specified schema for the `products` collection, along with the necessary descriptions and example responses for the API endpoints.
 ```
