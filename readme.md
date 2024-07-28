@@ -38,7 +38,7 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 
 ### Get Statistics
 
-**Endpoint:** `GET http://localhost:2005/statistics?month=:month`
+**Endpoint:** `GET http://localhost:2005/statistics:month`
 
 **Description:** Fetches statistics for the selected month, including total sale amount, total number of sold items, and total number of not sold items.
 
@@ -58,7 +58,7 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 
 ### Get Transactions
 
-**Endpoint:** 'GET http://127.0.0.1:2006/products'
+**Endpoint:** `GET http://127.0.0.1:2006/products`
 
 Description: Fetches all product transactions stored in the database.
 
@@ -83,7 +83,7 @@ Response:
 
 ### Get Bar Chart Data
 
-**Endpoint:** 'GET http://127.0.0.1:4000/bar-chart'
+**Endpoint:** `GET http://127.0.0.1:4000/bar-chart`
 
 Description: Fetches data to be used for generating a bar chart.
 
@@ -98,7 +98,7 @@ Response:
 
 ### Get Pie Chart Data
 
-**Endpoint:** GET http://127.0.0.1:5000/pie-chart
+**Endpoint:** `GET http://127.0.0.1:5000/pie-chart`
 
 Description: Fetches data to be used for generating a pie chart.
 
@@ -113,7 +113,7 @@ Description: Fetches data to be used for generating a pie chart.
 
 ### Get Combined Data
 
-**Endpoint:** GET http://localhost:3000/combined-data/:month
+**Endpoint:** `GET http://localhost:3000/combined-data/:month`
 
 Description: Fetches combined data for various analyses.
 
