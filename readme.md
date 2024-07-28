@@ -16,6 +16,7 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
   - [Get Pie Chart Data](#get-pie-chart-data)
   - [Get Combined Data](#get-combined-data)
 - [Database Schema](#database-schema)
+- [Final Output](#final-output)
 
 ## API Endpoints
 
@@ -47,64 +48,76 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 
 **Response:**
 
-```json
 {
-  "totalSaleAmount": 12345.67,
-  "totalSoldItems": 100,
-  "totalNotSoldItems": 50
+"totalSaleAmount": 12345.67,
+"totalSoldItems": 100,
+"totalNotSoldItems": 50
 }
-Get Transactions
-Endpoint: GET http://127.0.0.1:2006/products
+
+### Get Transactions
+
+**Endpoint:** 'GET http://127.0.0.1:2006/products'
 
 Description: Fetches all product transactions stored in the database.
 
 Response:
 
-[
-  {
-    "productId": "123",
-    "productName": "Product A",
-    "transactionDate": "2023-10-01",
-    "amount": 100.00,
-    "status": "sold"
-  },
-  {
-    "productId": "124",
-    "productName": "Product B",
-    "transactionDate": "2023-10-02",
-    "amount": 150.00,
-    "status": "not sold"
-  }
-]
-Get Bar Chart Data
-Endpoint: GET http://127.0.0.1:4000/bar-chart
+```json
+{
+"productId": "123",
+"productName": "Product A",
+"transactionDate": "2023-10-01",
+"amount": 100.00,
+"status": "sold"
+},
+{
+"productId": "124",
+"productName": "Product B",
+"transactionDate": "2023-10-02",
+"amount": 150.00,
+"status": "not sold"
+}
+```
+
+### Get Bar Chart Data
+
+**Endpoint:** 'GET http://127.0.0.1:4000/bar-chart'
 
 Description: Fetches data to be used for generating a bar chart.
 
 Response:
 
+```json
 {
   "labels": ["January", "February", "March"],
   "data": [1000, 1500, 2000]
 }
-Get Pie Chart Data
-Endpoint: GET http://127.0.0.1:5000/pie-chart
+```
+
+### Get Pie Chart Data
+
+**Endpoint:** GET http://127.0.0.1:5000/pie-chart
 
 Description: Fetches data to be used for generating a pie chart.
 
-Response:
+### Response:
 
+```json
 {
   "labels": ["Sold", "Not Sold"],
   "data": [70, 30]
 }
-Get Combined Data
-Endpoint: GET http://localhost:3000/combined-data/:month
+```
+
+### Get Combined Data
+
+**Endpoint:** GET http://localhost:3000/combined-data/:month
 
 Description: Fetches combined data for various analyses.
 
-Response:
+### Response:
 
+```json
 {
   "statistics": {
     "totalSaleAmount": 12345.67,
@@ -124,22 +137,26 @@ Response:
       "productId": "123",
       "productName": "Product A",
       "transactionDate": "2023-10-01",
-      "amount": 100.00,
+      "amount": 100.0,
       "status": "sold"
     },
     {
       "productId": "124",
       "productName": "Product B",
       "transactionDate": "2023-10-02",
-      "amount": 150.00,
+      "amount": 150.0,
       "status": "not sold"
     }
   ]
 }
-Database Schema
+```
+
+## Database Schema
+
 Define the schema for the products collection/table using Mongoose:
 
-const mongoose = require('mongoose');
+```javascript
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   id: { type: Number, required: true },
@@ -149,12 +166,30 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true },
   image: { type: String, required: true },
   sold: { type: Boolean, default: false },
-  dateOfSale: { type: Date }
+  dateOfSale: { type: Date },
 });
 
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;
-
-This updated content includes the specified schema for the `products` collection, along with the necessary descriptions and example responses for the API endpoints.
 ```
+
+### Final Output
+
+Here are some images of the final output:
+
+## Transaction List
+
+![alt text](image.png)
+
+## BarGraph
+
+![alt text](image-1.png)
+
+## Pie Chart
+
+![alt text](image-2.png)
+
+## Statistics Data
+
+![alt text](image-3.png)
