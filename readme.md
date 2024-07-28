@@ -2,10 +2,12 @@
 
 This project sets up a Node.js server that connects to a MongoDB database, fetches product transaction data from an external source, and provides multiple APIs to retrieve and analyze the stored products.
 
+## How to Run
+
+Run all the js files using `node filename.js` and then open the `FinalIndex.html` file to get the desired output.
+
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
   - [Initialize Database](#initialize-database)
   - [Get Statistics](#get-statistics)
@@ -13,40 +15,6 @@ This project sets up a Node.js server that connects to a MongoDB database, fetch
   - [Get Pie Chart Data](#get-pie-chart-data)
   - [Get Combined Data](#get-combined-data)
 - [Database Schema](#database-schema)
-
-## Installation
-
-1. **Set up a Node.js project:**
-
-   - Create a new directory for your project and navigate into it.
-   - Initialize a new Node.js project using `npm init`.
-
-2. **Install dependencies:**
-
-   - Install Express.js for creating the server: `npm install express`.
-   - Install Mongoose for interacting with MongoDB: `npm install mongoose`.
-   - Install Axios for making HTTP requests: `npm install axios`.
-
-3. **Ensure MongoDB is running:**
-
-   - Make sure you have MongoDB installed and running on your local machine. The default connection string is `mongodb://127.0.0.1:27017/database`.
-
-4. **Create the server file:**
-
-   - Create a file named `index.js` and add the server code provided in the project.
-
-5. **Start the server:**
-   - Run the server using the command: `node index.js`.
-   - The server will start on port 2007.
-
-## Usage
-
-1. **Initialize the database:**
-
-   - When the server starts, it will fetch product transaction data from an external source and populate the MongoDB database.
-
-2. **Access the APIs:**
-   - You can access the various API endpoints to retrieve and analyze the data.
 
 ## API Endpoints
 
