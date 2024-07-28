@@ -11,6 +11,7 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 - [API Endpoints](#api-endpoints)
   - [Initialize Database](#initialize-database)
   - [Get Statistics](#get-statistics)
+  - [Get Transactions](#get-transactions)
   - [Get Bar Chart Data](#get-bar-chart-data)
   - [Get Pie Chart Data](#get-pie-chart-data)
   - [Get Combined Data](#get-combined-data)
@@ -36,7 +37,7 @@ Run all the js files using `node filename.js` and then open the `FinalIndex.html
 
 ### Get Statistics
 
-**Endpoint:** `GET /statistics?month=:month`
+**Endpoint:** `GET http://localhost:2005/statistics?month=:month`
 
 **Description:** Fetches statistics for the selected month, including total sale amount, total number of sold items, and total number of not sold items.
 
